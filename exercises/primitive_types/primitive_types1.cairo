@@ -14,7 +14,7 @@ fn main() {
         ('Good morning!').print();
     }
 
-    let // Finish the rest of this line like the example! Or make it be false!
+    let is_evening=true;// Finish the rest of this line like the example! Or make it be false!
     if is_evening {
         ('Good evening!').print();
     }
