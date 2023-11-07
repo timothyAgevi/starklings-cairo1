@@ -15,7 +15,7 @@ fn main() {
     sale_price(original_price).print();
 }
 
-fn sale_price(price: u32) -> {
+fn sale_price(price: u32) -> u32{
     if is_even(price) {
         price - 10
     } else {
