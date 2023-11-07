@@ -10,6 +10,7 @@ use debug::PrintTrait;
 
 fn poly(x: usize, y: usize) -> usize {
     // FILL ME
+    let res= x*x *x +y -2;
     res // Do not change
 }
 
