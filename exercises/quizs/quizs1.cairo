@@ -7,9 +7,16 @@
 // I AM NOT DONE
 
 // Put your function here!
-// fn calculate_price_of_apples{
+fn calculate_price_of_apples(quantity:u16) ->u16{
+let price=if quantity<=40{3 }
+    else{
+        2
+    };
+    
+let total=price*quantity;
+total
 
-// }
+}
 
 // Do not change the tests!
 #[test]
