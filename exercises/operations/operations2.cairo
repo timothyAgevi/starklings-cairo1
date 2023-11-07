@@ -1,6 +1,7 @@
 // Remember last time you calculated division in Cairo0?
 // Now Cairo1 has native integer types e.g. u8, u32, ...u256, usize which support more operators than felts
 // And always watch out for overflows e.g in the last test
+//my comment with u8... atleast program shall panic if an overflow occurs
 // Let try to use them
 
 // I AM NOT DONE
@@ -8,19 +9,22 @@
 fn modulus(x: u8, y: u8) -> u8 {
     // calculate the modulus of x and y
     // FILL ME
+    let mut res:u8=x%y;
     res
 }
 
 fn floor_division(x: usize, y: usize) -> usize {
     // calculate the floor_division of x and y
     // FILL ME
+    let mut res:usize=x/y;
     res
 }
 
 fn multiplication(x: u64, y: u64) -> u64 {
     // calculate the multiplication of x and y
     // FILL ME
-    res
+     let mut res:u64=x*y;
+     res
 }
 
 
