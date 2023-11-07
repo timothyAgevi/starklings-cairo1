@@ -8,6 +8,6 @@ fn main() {
     call_me(3);
 }
 
-fn call_me(num:) {
+fn call_me(num:u8) {
     num.print();
 }
