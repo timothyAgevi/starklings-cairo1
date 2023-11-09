@@ -2,7 +2,7 @@
 // Address all the TODOs to make the tests pass!
 // Execute `starklings hint enums3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use debug::PrintTrait;
 
@@ -11,7 +11,7 @@ enum Message { // TODO: implement the message variant types based on their usage
 ChangeColor:(u8,u8,u8),
 Quit,
 Echo:felt252,
-MovePosition:Point,
+Move:Point,
 
 }
 
@@ -32,7 +32,7 @@ trait StateTrait {
     fn change_color(ref self: State, new_color: (u8, u8, u8));
     fn quit(ref self: State);
     fn echo(ref self: State, s: felt252);
-    fn move_position(ref self: State, p: Point);
+    fn move(ref self: State, p: Point);
     fn process(ref self: State, message: Message);
 }
 impl StateImpl of StateTrait {
@@ -49,7 +49,7 @@ impl StateImpl of StateTrait {
         s.print();
     }
 
-    fn move_position(ref self: State, p: Point) {
+    fn move(ref self: State, p: Point) {
         let State{color, position, quit, } = self;
         self = State { color: color, position: p, quit: quit,  };
     }
@@ -61,7 +61,7 @@ match message{
     Message::ChangeColor(rgb) => self.change_color(rgb),
     Message::Quit=>self.quit(),
     Message::Echo(msg)=>self.echo(msg),
-    Message::MovePosition(point)=>self.move_position(point),
+    Message::Move(point)=>self.move(point),
    
 
 }}
@@ -75,7 +75,7 @@ fn test_match_message_call() {
     let mut state = State { quit: false, position: Point { x: 0, y: 0 }, color: (0, 0, 0),  };
     state.process(Message::ChangeColor((255, 0, 255)));
     state.process(Message::Echo('hello world'));
-    state.process(Message::MovePosition(Point { x: 10, y: 15 }));
+    state.process(Message::Move(Point { x: 10, y: 15 }));
     state.process(Message::Quit);
 
     assert(state.color == (255, 0, 255), 'wrong color');
