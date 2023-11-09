@@ -8,6 +8,11 @@ use debug::PrintTrait;
 
 #[derive(Drop, Copy)]
 enum Message { // TODO: implement the message variant types based on their usage below
+ChangeColor:(u8,u8,u8),
+Quit,
+Echo:felt252,
+MovePosition:Point,
+
 }
 
 #[derive(Drop, Copy)]
@@ -52,8 +57,17 @@ impl StateImpl of StateTrait {
     fn process(
         ref self: State, message: Message
     ) { // TODO: create a match expression to process the different message variants
-    }
+match message{
+    Message::ChangeColor(rgb) => self.change_color(rgb),
+    Message::Quit=>self.quit(),
+    Message::Echo(msg)=>self.echo(msg),
+    Message::MovePosition(point)=>self.move_position(point),
+   
+
+}}
 }
+//     }
+// }
 
 
 #[test]
@@ -61,7 +75,7 @@ fn test_match_message_call() {
     let mut state = State { quit: false, position: Point { x: 0, y: 0 }, color: (0, 0, 0),  };
     state.process(Message::ChangeColor((255, 0, 255)));
     state.process(Message::Echo('hello world'));
-    state.process(Message::Move(Point { x: 10, y: 15 }));
+    state.process(Message::MovePosition(Point { x: 10, y: 15 }));
     state.process(Message::Quit);
 
     assert(state.color == (255, 0, 255), 'wrong color');
