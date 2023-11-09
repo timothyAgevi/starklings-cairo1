@@ -14,7 +14,7 @@ let price=if quantity<=40{3 }
     };
     
 let total=price*quantity;
-total
+return total;
 
 }
 
