@@ -4,7 +4,7 @@
 // Make the code compile and the tests pass!
 // Execute `starklings hint structs3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use array::ArrayTrait;
 #[derive(Copy, Drop)]
