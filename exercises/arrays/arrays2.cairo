@@ -3,7 +3,7 @@
 // Make me compile and pass the test!
 // Execute `starklings hint arrays2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use array::ArrayTrait;
 use option::OptionTrait;
