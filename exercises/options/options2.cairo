@@ -1,7 +1,7 @@
 // options2.cairo
 // Execute `starklings hint options2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use option::OptionTrait;
 use debug::PrintTrait;
