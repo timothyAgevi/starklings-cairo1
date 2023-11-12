@@ -1,7 +1,7 @@
 // move_semantics1.cairo
 // Execute `starklings hint move_semantics1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use array::ArrayTrait;
 use array::ArrayTCloneImpl;
