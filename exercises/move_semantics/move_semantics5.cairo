@@ -3,7 +3,7 @@
 // adding, changing or removing any of them.
 // Execute `starklings hint move_semantics5` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 use array::ArrayTrait;
 #[test]
 fn main() {
