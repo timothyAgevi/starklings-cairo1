@@ -9,11 +9,15 @@ use debug::PrintTrait;
 
 fn main() {
     let arr0 = ArrayTrait::new();
-
-    let mut arr1 = fill_arr(arr0);
+//change is here
+    let mut arr1 = fill_arr(arr0.span().snapshot.clone());
 
     // Do not change the following line!
     arr0.print();
+    
+      arr1.append(88);
+
+    arr1.span().snapshot.clone().print();
 }
 
 fn fill_arr(arr: Array<felt252>) -> Array<felt252> {
