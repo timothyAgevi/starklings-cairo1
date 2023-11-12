@@ -7,11 +7,12 @@
 use array::ArrayTrait;
 #[test]
 fn main() {
-    let mut a = ArrayTrait::new();
-    let mut b = pass_by_value(a);
-    pass_by_ref(ref a);
-    pass_by_ref(ref b);
+   let mut a = ArrayTrait::new();
     pass_by_snapshot(@a);
+    pass_by_ref(ref a);
+    let mut b = pass_by_value(a);
+    pass_by_ref(ref b);
+    pass_by_snapshot(@b);
 }
 
 fn pass_by_value(mut arr: Array<felt252>) -> Array<felt252> {
