@@ -17,7 +17,7 @@ fn main() {
     
       arr1.append(88);
 
-    arr1.span().snapshot.clone().print();
+    arr1.span().snapshot.clone().print();//answer is here
 }
 
 fn fill_arr(arr: Array<felt252>) -> Array<felt252> {

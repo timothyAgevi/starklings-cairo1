@@ -12,11 +12,9 @@ use clone::Clone;
 use debug::PrintTrait;
 
 fn main() {
-    let arr0 = ArrayTrait::<felt252>::new();
+    let mut arr1 = fill_arr();//answer here removed aurgument
 
-    let mut arr1 = fill_arr(arr0);
-
-    arr1.clone().print();
+    arr1.span().snapshot.clone().print();
 
     arr1.append(88);
 
@@ -24,8 +22,9 @@ fn main() {
 }
 
 // `fill_arr()` should no longer takes `arr: Array<felt252>` as argument
-fn fill_arr(arr: Array<felt252>) -> Array<felt252> {
-    let mut arr = arr;
+fn fill_arr() -> Array<felt252> {//aswer is here removed aurgument
+    let  mut arr = ArrayTrait::<felt252>::new();//answer here made is mut 
+    // let mut arr = arr; //answer commented thi out
 
     arr.append(22);
     arr.append(44);
