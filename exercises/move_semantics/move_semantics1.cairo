@@ -16,12 +16,12 @@ fn main() {
     let mut arr1 = fill_arr(arr0);
 
     // This is just a print statement for arrays.
-    arr1.span().snapshot.clone().print();
+    arr1.span().snapshot.clone().print();//answer
 
     //TODO fix the error here without modifying this line.
     arr1.append(88);
 
-    arr1.span().snapshot.clone().print();
+    arr1.span().snapshot.clone().print();//answer
 }
 
 fn fill_arr(arr: Array<felt252>) -> Array<felt252> {
