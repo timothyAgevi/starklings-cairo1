@@ -8,7 +8,7 @@
 
 // Fill in the impl block to make the code work.
 
-// I AM NOT DONE
+
 
 #[derive(Copy, Drop)]
 struct Animal {
