@@ -37,8 +37,9 @@ trait DogTrait {
 
 impl AnimalFishImpl of AnimalTrait<Fish> {
     fn new() -> Fish {
-        Fish { noise: 'blub', distance: 0 }
+        Fish { noise: 'blub', distance: 0_u32 }
     }
+
     fn make_noise(self: Fish) -> felt252 {
         self.noise
     }
@@ -49,7 +50,7 @@ impl AnimalFishImpl of AnimalTrait<Fish> {
 
 impl AnimalDogImpl of AnimalTrait<Dog> {
     fn new() -> Dog {
-        Dog { noise: 'woof', distance: 0 }
+        Dog { noise: 'woof', distance: 0_u32 }
     }
     fn make_noise(self: Dog) -> felt252 {
         self.noise
@@ -60,8 +61,22 @@ impl AnimalDogImpl of AnimalTrait<Dog> {
 }
 
 // TODO: implement FishTrait for the type Fish
+impl FishTraitImpl of FishTrait {
+    fn swim(ref self: Fish){
+        let Fish {noise, mut distance} = self;
+        distance = 1_u32;
+        self = Fish {noise, distance};
+    }
+}
 
 // TODO: implement DogTrait for the type Dog
+impl DogTraitImpl of DogTrait{
+    fn walk(ref self : Dog){
+        let Dog {noise, mut distance} = self;
+        distance = 1_u32;
+        self = Dog {noise, distance}; 
+    }
+}
 
 #[test]
 fn test_traits3() {
