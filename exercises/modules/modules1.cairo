@@ -13,13 +13,14 @@ mod restaurant {
 #[test]
 fn test_mod_fn() {
     // Fix this line to call take_order function from module
-    let order_result = take_order();
+    let order_result = restaurant::take_order(); //aded restaurant :: to make it work
 
     assert(order_result == 'order_taken', 'Order not taken');
 }
 
 #[cfg(test)]
 mod tests {
+     use super::restaurant::take_order; //line that made it work
     #[test]
     fn test_super_fn() {
         // Fix this line to call take_order function
