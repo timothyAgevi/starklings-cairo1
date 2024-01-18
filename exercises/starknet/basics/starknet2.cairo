@@ -5,7 +5,7 @@
 // Help Jill rewrite the contract with a Storage and a constructor.
 // There is a `ContractAddress` type which should be used for Wallet addresses.
 
-// I AM NOT DONE
+
 
 use starknet::ContractAddress;
 
