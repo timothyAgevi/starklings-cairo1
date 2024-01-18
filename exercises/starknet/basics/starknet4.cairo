@@ -41,6 +41,11 @@ mod LizInventory {
             // * takes product and new_stock
             // * adds new_stock to stock in inventory
             // * only owner can call this
+             let caller = get_caller_address();
+            let contract_owner = self.get_owner();
+            assert(caller == contract_owner, 'Not_Owner');
+            let prev_stock = self.storage_inventory.read(product);
+            self.storage_inventory.write(product,new_stock + prev_stock);
         }
 
         fn purchase(ref self: ContractState, ) {
@@ -48,12 +53,16 @@ mod LizInventory {
             // * takes product and quantity
             // * subtracts quantity from stock in inventory
             // * anybody can call this
+            let current_inventory = self.storage_inventory.read(product);
+            let rem = current_inventory - quantity;
+            self.storage_inventory.write(product,rem);
         }
 
         fn get_stock(self: @ContractState, ) -> u32 {
             // TODO:
             // * takes product
             // * returns product stock in inventory
+             self.storage_inventory.read(product)
         }
 
         fn get_owner(self: @ContractState) -> ContractAddress {
@@ -160,7 +169,7 @@ mod test {
             LizInventory::TEST_CLASS_HASH.try_into().unwrap(), 0, calldata.span(), false
         )
             .unwrap();
-        let contract0 = ILizInventoryDispatcher { contract_address: address0 };
+        let contract0 = ILizInventoryDispatcher { contract_address: address0};
         contract0
     }
 }
