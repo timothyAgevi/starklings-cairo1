@@ -16,17 +16,20 @@ mod JillsContract {
 
     #[storage]
     struct Storage { // TODO: Add `contract_owner` storage, with ContractAddress type
+     contract_owner : ContractAddress,
     }
 
     #[constructor]
     fn constructor(
         ref self: ContractState, owner: ContractAddress
     ) { // TODO: Write `owner` to contract_owner storage
+    self.contract_owner.write(owner);
     }
 
     #[external(v0)]
     impl IJillsContractImpl of super::IJillsContract<ContractState> {
         fn get_owner(self: @ContractState) -> ContractAddress { // TODO: Read contract_owner storage
+        self.contract_owner.read()
         }
     }
 }
