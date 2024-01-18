@@ -25,7 +25,7 @@ mod ProgressTracker {
     struct Storage {
         contract_owner: ContractAddress,
         // TODO: Set types for LegacyMap
-        progress: LegacyMap<>
+        progress: LegacyMap::<ContractAddress, u16>
     }
 
     #[constructor]
