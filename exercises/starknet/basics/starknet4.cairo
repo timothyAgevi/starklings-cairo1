@@ -25,6 +25,7 @@ mod LizInventory {
     struct Storage {
         contract_owner: ContractAddress,
         // TODO: add storage inventory, that maps product (felt252) to stock quantity (u32)
+        storage_inventory: LegacyMap::<felt252, u32>
     }
 
     #[constructor]
