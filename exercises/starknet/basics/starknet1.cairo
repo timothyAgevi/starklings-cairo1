@@ -13,8 +13,11 @@ trait IJoesContract<TContractState> {
 #[starknet::contract]
 mod JoesContract {
     #[storage]
-    struct Storage {}
+    struct Storage {
+        owner:felt252//ok allso ythis owe dont know if its necessary or am just bn extraa
 
+    }
+#[external(v0)] // added this line and it worked
     impl IJoesContractImpl of super::IJoesContract<ContractState> {
         fn get_owner(self: @ContractState) -> felt252 {
             'Joe'
