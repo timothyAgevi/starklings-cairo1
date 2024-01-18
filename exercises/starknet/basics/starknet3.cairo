@@ -48,6 +48,7 @@ mod ProgressTracker {
         }
 
         fn get_progress(self: @ContractState, user: ContractAddress) -> u16 { // Get user progress
+        self.progress.read(user)
         }
 
         fn get_contract_owner(self: @ContractState) -> ContractAddress {
