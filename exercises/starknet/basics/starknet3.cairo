@@ -40,6 +40,11 @@ mod ProgressTracker {
             ref self: ContractState, user: ContractAddress, new_progress: u16
         ) { // TODO: assert owner is calling
         // TODO: set new_progress for user,
+        let caller = get_caller_address();
+            let contract_owner = self.get_contract_owner();
+            assert(caller == contract_owner, 'Not_Owner');
+               // TODO: set new_progress for user,
+        self.progress.write(user,new_progress)
         }
 
         fn get_progress(self: @ContractState, user: ContractAddress) -> u16 { // Get user progress
