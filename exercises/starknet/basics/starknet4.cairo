@@ -1,11 +1,9 @@
+
 // starknet4.cairo
 // Liz, a friend of Jill, wants to manage inventory for her store on-chain.
 // This is a bit challenging for Joe and Jill, Liz prepared an outline
 // for how contract should work, can you help Jill and Joe write it?
 // Execute `starklings hint starknet4` or use the `hint` watch subcommand for a hint.
-
-// I AM NOT DONE
-
 use starknet::ContractAddress;
 
 #[starknet::interface]
@@ -20,12 +18,12 @@ trait ILizInventory<TContractState> {
 mod LizInventory {
     use starknet::ContractAddress;
     use starknet::get_caller_address;
+    use option::OptionTrait;
 
     #[storage]
     struct Storage {
         contract_owner: ContractAddress,
-        // TODO: add storage inventory, that maps product (felt252) to stock quantity (u32)
-        storage_inventory: LegacyMap::<felt252, u32>
+        storage_inventory: LegacyMap::<felt252, u32>,
     }
 
     #[constructor]
@@ -33,36 +31,36 @@ mod LizInventory {
         self.contract_owner.write(owner);
     }
 
-
     #[external(v0)]
     impl LizInventoryImpl of super::ILizInventory<ContractState> {
-        fn add_stock(ref self: ContractState, ) {
-            // TODO:
-            // * takes product and new_stock
-            // * adds new_stock to stock in inventory
-            // * only owner can call this
-             let caller = get_caller_address();
+        fn add_stock(ref self: ContractState, product: felt252, new_stock: u32) {
+            // Get the caller's address
+            let caller = get_caller_address();
+            
+            // Ensure only the owner can add stock
             let contract_owner = self.get_owner();
             assert(caller == contract_owner, 'Not_Owner');
+            
+            // Read the current stock for the product
             let prev_stock = self.storage_inventory.read(product);
-            self.storage_inventory.write(product,new_stock + prev_stock);
+            
+            // Update the stock
+            self.storage_inventory.write(product, new_stock + prev_stock);
         }
 
-        fn purchase(ref self: ContractState, ) {
-            // TODO:
-            // * takes product and quantity
-            // * subtracts quantity from stock in inventory
-            // * anybody can call this
-            let current_inventory = self.storage_inventory.read(product);
-            let rem = current_inventory - quantity;
-            self.storage_inventory.write(product,rem);
+        fn purchase(ref self: ContractState, product: felt252, quantity: u32) {
+            // Read the current stock for the product
+            let current_stock = self.storage_inventory.read(product);
+            
+            // Ensure there is enough stock to purchase
+            assert(current_stock >= quantity, 'Not_Enough_Stock');
+            
+            // Update the stock
+            self.storage_inventory.write(product, current_stock - quantity);
         }
 
-        fn get_stock(self: @ContractState, ) -> u32 {
-            // TODO:
-            // * takes product
-            // * returns product stock in inventory
-             self.storage_inventory.read(product)
+        fn get_stock(self: @ContractState, product: felt252) -> u32 {
+            self.storage_inventory.read(product)
         }
 
         fn get_owner(self: @ContractState) -> ContractAddress {
@@ -80,7 +78,6 @@ mod test {
     use traits::TryInto;
     use starknet::syscalls::deploy_syscall;
     use core::result::ResultTrait;
-
     use starknet::Felt252TryIntoContractAddress;
     use option::OptionTrait;
     use super::LizInventory;
@@ -91,7 +88,7 @@ mod test {
     #[available_gas(2000000000)]
     fn test_owner() {
         let owner: ContractAddress = 'Elizabeth'.try_into().unwrap();
-        let dispatcher = deploy_contract();
+        let dispatcher = deploy_contract(owner);
 
         // Check that contract owner is set
         let contract_owner = dispatcher.get_owner();
@@ -101,11 +98,10 @@ mod test {
     #[test]
     #[available_gas(2000000000)]
     fn test_stock() {
-        let dispatcher = deploy_contract();
-        let owner = util_felt_addr('Elizabeth');
+        let dispatcher = deploy_contract(util_felt_addr('Elizabeth'));
 
         // Call contract as owner
-        starknet::testing::set_contract_address(owner);
+        starknet::testing::set_contract_address(util_felt_addr('Elizabeth'));
 
         // Add stock
         dispatcher.add_stock('Nano', 10);
@@ -120,18 +116,17 @@ mod test {
     #[test]
     #[available_gas(2000000000)]
     fn test_stock_purchase() {
-        let owner = util_felt_addr('Elizabeth');
-        let dispatcher = deploy_contract();
-        let result = dispatcher.get_owner();
+        let dispatcher = deploy_contract(util_felt_addr('Elizabeth'));
+
         // Call contract as owner
-        starknet::testing::set_contract_address(owner);
+        starknet::testing::set_contract_address(util_felt_addr('Elizabeth'));
 
         // Add stock
         dispatcher.add_stock('Nano', 10);
         let stock = dispatcher.get_stock('Nano');
         assert(stock == 10, 'stock should be 10');
 
-        // Call contract as owner
+        // Call contract as a different address
         starknet::testing::set_caller_address(0.try_into().unwrap());
 
         dispatcher.purchase('Nano', 2);
@@ -143,8 +138,8 @@ mod test {
     #[should_panic]
     #[available_gas(2000000000)]
     fn test_set_stock_fail() {
-        let dispatcher = deploy_contract();
-        // Try to add stock, should panic to pass test!
+        let dispatcher = deploy_contract(util_felt_addr('Elizabeth'));
+        // Try to add stock as a non-owner, should panic to pass test!
         dispatcher.add_stock('Nano', 20);
     }
 
@@ -152,8 +147,8 @@ mod test {
     #[should_panic]
     #[available_gas(2000000000)]
     fn test_purchase_out_of_stock() {
-        let dispatcher = deploy_contract();
-        // Purchse out of stock
+        let dispatcher = deploy_contract(util_felt_addr('Elizabeth'));
+        // Purchase more stock than available, should panic to pass test
         dispatcher.purchase('Nano', 2);
     }
 
@@ -161,14 +156,12 @@ mod test {
         addr_felt.try_into().unwrap()
     }
 
-    fn deploy_contract() -> ILizInventoryDispatcher {
-        let owner: felt252 = 'Elizabeth';
+    fn deploy_contract(owner: ContractAddress) -> ILizInventoryDispatcher {
         let mut calldata = ArrayTrait::new();
-        calldata.append(owner);
+        calldata.append(owner.into());
         let (address0, _) = deploy_syscall(
             LizInventory::TEST_CLASS_HASH.try_into().unwrap(), 0, calldata.span(), false
-        )
-            .unwrap();
+        ).unwrap();
         let contract0 = ILizInventoryDispatcher { contract_address: address0};
         contract0
     }
